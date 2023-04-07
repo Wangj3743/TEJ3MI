@@ -1,0 +1,24 @@
+cmcon = 7
+trisb = %00000000
+trisa = %00000011
+
+
+pause 5000							' all bots have this
+
+main:
+	portb = %00001001 				' motors spinning in opposite directions; bot spins
+ 	if porta.0 = 0 then goto line			' white/line is detected (0V is white)
+	if porta.1 = 0 then goto attack		' bot detected 
+	goto main						' function repeats; motors opposite
+
+line:								' white /border line is detected
+	portb = %00001010 				' motors reverse
+ 	pause 2000						' motors run for 2 secs
+	if porta.0 = 0 then goto line			' if white/line is still detected, loop
+ 	goto main						' else, go to main function
+
+attack:							' bot detected 
+	portb = %00000101					' motors forward
+	if porta.0 = 0 then goto line			' if white/line is still detected, loop
+	if porta.1 = 0 then goto attack		' if bot is still detected, loop
+ 	goto main						' else, go to main function

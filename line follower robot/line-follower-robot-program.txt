@@ -1,0 +1,23 @@
+ANSEL = 0					' sets up chip to convert analog to digital
+CMCON = 7
+TRISIO.2 = 1				' LS for input
+TRISIO.4 = 1				' RS for input
+TRISIO.5 = 0				' LM for output
+TRISIO.1 = 0				' RM for output
+
+
+main:
+GPIO.5 = 1					' left motor, on
+GPIO.1 = 1					' right motor, on
+IF GPIO.2 = 0 THEN GOTO rm: 		' left sensor, white 
+IF GPIO.4 = 0 THEN GOTO lm:		' right sensor, white
+
+rm:
+	GPIO.1 = 0				' right motor
+ 	IF GPIO.2 = 0 THEN GOTO rm	' left sensor, repeats loop while 0/white, terminates loop LS is not 0/white
+goto main
+
+lm: 
+	GPIO.5 = 0				' left motor
+	IF GPIO.4 = 0 THEN GOTO lm	' right sensor, repeats loop while 0/white, terminates loop LS is not 0/white
+goto main

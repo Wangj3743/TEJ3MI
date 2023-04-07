@@ -1,0 +1,14 @@
+CMCON = 7
+TRISB = %00000000 		' 76543210   // 0 is output, 1 is input ' A1 A0 will have input //can also use DEC
+TRISA = %00000011 		' A0 A1 as input
+
+MAIN:
+	PORTB = %00001010 	' 2-3 are right motor, 0-1 are left motor ' 1010 0101 0110 1001 could be forward, try things out ' forward
+ 	if PORTA.0 = 0 then GOTO LINE
+	GOTO MAIN
+
+LINE:
+	PORTB = %0000101 		' opposite bits as forward (so that it goes backwards)
+	PAUSE 1500
+	if PORTA.0 = 0 then GOTO LINE
+	GOTO MAIN
